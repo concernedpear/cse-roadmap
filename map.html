@@ -59,12 +59,6 @@
       font-weight: bold;
       margin-top: 6px;
     }
-
-    @media (max-width: 768px) {
-      body { padding: 10px; }
-      .container { padding: 15px; border-radius: 0; }
-      .sub { margin-left: 15px; }
-    }
   </style>
 </head>
 
@@ -75,9 +69,9 @@
 <div class="container">
 
   <div class="auth-bar">
-    <div id="userInfo">Not logged in</div>
+    <div id="userInfo">Checking login...</div>
     <div>
-      <button id="loginBtn">Login with Google</button>
+      <button id="loginBtn" style="display:none;">Login with Google</button>
       <button id="logoutBtn" style="display:none;">Logout</button>
     </div>
   </div>
@@ -117,10 +111,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-/* 🔴 THIS WAS MISSING */
 const auth = firebase.auth();
-
-/* 🔴 MUST COME AFTER auth */
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
 const db = firebase.firestore();
@@ -133,51 +124,59 @@ const allCheckboxes = document.querySelectorAll("input[type='checkbox']");
 
 let currentUser = null;
 
+/* DISABLE EVERYTHING INITIALLY */
+enableCheckboxes(false);
+
+/* LOGIN / LOGOUT */
 loginBtn.onclick = () => auth.signInWithRedirect(provider);
 logoutBtn.onclick = () => auth.signOut();
 
-auth.onAuthStateChanged(async user => {
-  currentUser = user;
+/* 🔑 VERY IMPORTANT: HANDLE REDIRECT FIRST */
+auth.getRedirectResult()
+  .then(result => {
+    if (result && result.user) {
+      console.log("Redirect login successful:", result.user.email);
+    }
+  })
+  .catch(err => console.error("Redirect error:", err))
+  .finally(() => {
+    startAuthListener();
+  });
 
-  if (!user) {
-    userInfo.textContent = "Not logged in";
-    loginBtn.style.display = "inline-block";
-    logoutBtn.style.display = "none";
+/* AUTH STATE LISTENER (STARTED ONLY AFTER REDIRECT HANDLED) */
+function startAuthListener() {
+  auth.onAuthStateChanged(async user => {
+    currentUser = user;
+
+    if (!user) {
+      userInfo.textContent = "Not logged in";
+      loginBtn.style.display = "inline-block";
+      logoutBtn.style.display = "none";
+      enableCheckboxes(false);
+      return;
+    }
+
+    userInfo.textContent = "Logged in";
+    loginBtn.style.display = "none";
+    logoutBtn.style.display = "inline-block";
     enableCheckboxes(false);
-    clearCheckboxes();
-    return;
-  }
 
-  // 🔑 IMPORTANT: update UI IMMEDIATELY
-  userInfo.textContent = "Logged in";
-  loginBtn.style.display = "none";
-  logoutBtn.style.display = "inline-block";
-  enableCheckboxes(false); // locked until profile check
+    const userDoc = await db.collection("users").doc(user.uid).get();
 
-  const userDoc = await db.collection("users").doc(user.uid).get();
+    if (!userDoc.exists || !userDoc.data().profileCompleted) {
+      window.location.href = "profile.html";
+      return;
+    }
 
-  if (!userDoc.exists || !userDoc.data().profileCompleted) {
-    window.location.href = "profile.html";
-    return;
-  }
-
-  // 🔑 Now refine UI with real data
-  userInfo.textContent = `Logged in as ${userDoc.data().displayName}`;
-  enableCheckboxes(true);
-  await loadProgress();
-});
-
-auth.getRedirectResult().catch(err =>
-  console.error("Redirect error:", err)
-);
-
-function enableCheckboxes(enable) {
-  allCheckboxes.forEach(cb => cb.disabled = !enable);
+    userInfo.textContent = `Logged in as ${userDoc.data().displayName}`;
+    enableCheckboxes(true);
+    await loadProgress();
+  });
 }
 
-function clearCheckboxes() {
-  allCheckboxes.forEach(cb => cb.checked = false);
-  updateProgress();
+/* HELPERS */
+function enableCheckboxes(enable) {
+  allCheckboxes.forEach(cb => cb.disabled = !enable);
 }
 
 async function loadProgress() {
@@ -188,44 +187,8 @@ async function loadProgress() {
   allCheckboxes.forEach(cb => {
     if (progress[cb.dataset.id]) cb.checked = true;
   });
-  syncParents();
   updateProgress();
 }
-
-async function saveProgress() {
-  if (!currentUser) return;
-  const progress = {};
-  allCheckboxes.forEach(cb => {
-    if (cb.checked) progress[cb.dataset.id] = true;
-  });
-  await db.collection("userProgress").doc(currentUser.uid)
-    .set({ progress }, { merge: true });
-}
-
-function syncParents() {
-  document.querySelectorAll(".parent").forEach(parent => {
-    const group = parent.dataset.group;
-    const children = document.querySelectorAll(`[data-parent="${group}"]`);
-    parent.checked = [...children].every(c => c.checked);
-  });
-}
-
-document.querySelectorAll(".parent").forEach(parent => {
-  parent.addEventListener("change", () => {
-    document.querySelectorAll(`[data-parent="${parent.dataset.group}"]`)
-      .forEach(child => child.checked = parent.checked);
-    saveProgress();
-    updateProgress();
-  });
-});
-
-document.querySelectorAll("[data-parent]").forEach(child => {
-  child.addEventListener("change", () => {
-    syncParents();
-    saveProgress();
-    updateProgress();
-  });
-});
 
 function updateProgress() {
   const total = allCheckboxes.length;
@@ -235,10 +198,7 @@ function updateProgress() {
   progressBar.textContent = percent + "%";
   percentageText.textContent = percent + "% Completed";
 }
-
-enableCheckboxes(false);
 </script>
 
 </body>
 </html>
-
