@@ -158,6 +158,33 @@ loginBtn.onclick = () => auth.signInWithPopup(provider);
 logoutBtn.onclick = () => auth.signOut();
 
 auth.onAuthStateChanged(async user => {
+  console.log("Auth state changed:", user);
+
+  if (!user) {
+    userInfo.textContent = "Not logged in";
+    loginBtn.style.display = "inline-block";
+    logoutBtn.style.display = "none";
+    enableCheckboxes(false);
+    clearCheckboxes();
+    return;
+  }
+
+  console.log("User UID:", user.uid);
+  console.log("User Email:", user.email);
+
+  const userDoc = await db.collection("users").doc(user.uid).get();
+
+  if (!userDoc.exists || !userDoc.data().profileCompleted) {
+    window.location.href = "profile.html";
+    return;
+  }
+
+  userInfo.textContent = `Logged in as ${userDoc.data().displayName}`;
+  loginBtn.style.display = "none";
+  logoutBtn.style.display = "inline-block";
+  enableCheckboxes(true);
+  await loadProgress();
+});
   currentUser = user;
 
   if (!user) {
@@ -271,4 +298,5 @@ enableCheckboxes(false);
 
 </body>
 </html>
+
 
