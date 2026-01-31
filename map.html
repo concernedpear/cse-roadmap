@@ -93,35 +93,15 @@
   <div class="section">
     <h2>Programming Languages</h2>
 
-    <!-- C -->
-    <label>
-      <input type="checkbox" class="parent" data-group="c" data-id="c">
-      C Language
-    </label>
-    <label class="sub">
-      <input type="checkbox" data-parent="c" data-id="c.basics">
-      Basics
-    </label>
-    <label class="sub">
-      <input type="checkbox" data-parent="c" data-id="c.loops">
-      Loops
-    </label>
+    <label><input type="checkbox" class="parent" data-group="c" data-id="c"> C Language</label>
+    <label class="sub"><input type="checkbox" data-parent="c" data-id="c.basics"> Basics</label>
+    <label class="sub"><input type="checkbox" data-parent="c" data-id="c.loops"> Loops</label>
 
     <br>
 
-    <!-- Python -->
-    <label>
-      <input type="checkbox" class="parent" data-group="python" data-id="python">
-      Python
-    </label>
-    <label class="sub">
-      <input type="checkbox" data-parent="python" data-id="python.basics">
-      Basics
-    </label>
-    <label class="sub">
-      <input type="checkbox" data-parent="python" data-id="python.oop">
-      OOP
-    </label>
+    <label><input type="checkbox" class="parent" data-group="python" data-id="python"> Python</label>
+    <label class="sub"><input type="checkbox" data-parent="python" data-id="python.basics"> Basics</label>
+    <label class="sub"><input type="checkbox" data-parent="python" data-id="python.oop"> OOP</label>
   </div>
 
 </div>
@@ -132,12 +112,12 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <script>
-/* 🔴 PASTE YOUR FIREBASE CONFIG HERE */
+/* FIREBASE CONFIG */
 const firebaseConfig = {
-  apiKey: "AIzaSyCh25xL8R3d1RRhe7zm7K7kbPk_RwBVVsI",
-  authDomain: "cse-roadmap.firebaseapp.com",
-  projectId: "cse-roadmap",
-  appId: "1:982200573078:web:7c5ace992a1c9b17c7f6b7"
+  apiKey: "MY",
+  authDomain: "MY",
+  projectId: "MY",
+  appId: "MY"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -153,38 +133,13 @@ const allCheckboxes = document.querySelectorAll("input[type='checkbox']");
 
 let currentUser = null;
 
-/* AUTH */
+/* AUTH ACTIONS */
 loginBtn.onclick = () => auth.signInWithRedirect(provider);
 logoutBtn.onclick = () => auth.signOut();
 
+/* AUTH STATE */
 auth.onAuthStateChanged(async user => {
-  console.log("Auth state changed:", user);
-
-  if (!user) {
-    userInfo.textContent = "Not logged in";
-    loginBtn.style.display = "inline-block";
-    logoutBtn.style.display = "none";
-    enableCheckboxes(false);
-    clearCheckboxes();
-    return;
-  }
-
-  console.log("User UID:", user.uid);
-  console.log("User Email:", user.email);
-
-  const userDoc = await db.collection("users").doc(user.uid).get();
-
-  if (!userDoc.exists || !userDoc.data().profileCompleted) {
-    window.location.href = "profile.html";
-    return;
-  }
-
-  userInfo.textContent = `Logged in as ${userDoc.data().displayName}`;
-  loginBtn.style.display = "none";
-  logoutBtn.style.display = "inline-block";
-  enableCheckboxes(true);
-  await loadProgress();
-});
+  console.log("Auth state:", user);
   currentUser = user;
 
   if (!user) {
@@ -210,6 +165,11 @@ auth.onAuthStateChanged(async user => {
   await loadProgress();
 });
 
+/* HANDLE REDIRECT */
+auth.getRedirectResult().catch(err =>
+  console.error("Redirect error:", err)
+);
+
 /* ENABLE / DISABLE */
 function enableCheckboxes(enable) {
   allCheckboxes.forEach(cb => cb.disabled = !enable);
@@ -230,9 +190,7 @@ async function loadProgress() {
 
   const progress = doc.data().progress || {};
   allCheckboxes.forEach(cb => {
-    if (cb.dataset.id && progress[cb.dataset.id]) {
-      cb.checked = true;
-    }
+    if (progress[cb.dataset.id]) cb.checked = true;
   });
 
   syncParents();
@@ -245,9 +203,7 @@ async function saveProgress() {
 
   const progress = {};
   allCheckboxes.forEach(cb => {
-    if (cb.checked && cb.dataset.id) {
-      progress[cb.dataset.id] = true;
-    }
+    if (cb.checked) progress[cb.dataset.id] = true;
   });
 
   await db.collection("userProgress")
@@ -281,15 +237,14 @@ document.querySelectorAll("[data-parent]").forEach(child => {
   });
 });
 
-/* PROGRESS BAR */
+/* PROGRESS */
 function updateProgress() {
   const total = allCheckboxes.length;
   const checked = document.querySelectorAll("input[type='checkbox']:checked").length;
   const percent = Math.round((checked / total) * 100);
-
-  document.getElementById("progressBar").style.width = percent + "%";
-  document.getElementById("progressBar").textContent = percent + "%";
-  document.getElementById("percentageText").textContent = percent + "% Completed";
+  progressBar.style.width = percent + "%";
+  progressBar.textContent = percent + "%";
+  percentageText.textContent = percent + "% Completed";
 }
 
 /* INIT */
@@ -298,6 +253,3 @@ enableCheckboxes(false);
 
 </body>
 </html>
-
-
-
