@@ -1,67 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CSE Placement Roadmap Tracker</title>
+    <meta charset="UTF-8">
 
-<style>
-body {
-    font-family: Arial, sans-serif;
-    background: #f4f6f8;
-    padding: 20px;
-}
+    <!-- ✅ IMPORTANT: Mobile Responsive -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-h1 { text-align: center; }
+    <title>CSE Placement Roadmap Tracker</title>
 
-.container {
-    max-width: 900px;
-    margin: auto;
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            padding: 20px;
+            margin: 0;
+        }
 
-.section { margin-bottom: 25px; }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-.section h2 {
-    border-bottom: 2px solid #ddd;
-    padding-bottom: 5px;
-}
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+        }
 
-label {
-    display: block;
-    margin: 5px 0;
-    cursor: pointer;
-}
+        .section {
+            margin-bottom: 25px;
+        }
 
-.sub { margin-left: 25px; }
+        .section h2 {
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 5px;
+        }
 
-/* Progress Bar */
-.progress-bar-bg {
-    width: 100%;
-    height: 22px;
-    background: #ddd;
-    border-radius: 20px;
-    overflow: hidden;
-}
+        label {
+            display: block;
+            margin: 6px 0;
+            cursor: pointer;
+            font-size: 15px;
+        }
 
-.progress-bar {
-    height: 100%;
-    width: 0%;
-    background: #4caf50;
-    color: white;
-    text-align: center;
-    font-size: 14px;
-    transition: width 0.3s;
-}
+        .sub {
+            margin-left: 25px;
+        }
 
-.percentage {
-    text-align: center;
-    margin-top: 6px;
-    font-weight: bold;
-}
-</style>
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 20px;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 22px;
+            background: #ddd;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #4caf50;
+            color: white;
+            text-align: center;
+            font-size: 14px;
+            transition: width 0.3s ease;
+        }
+
+        .percentage {
+            text-align: center;
+            margin-top: 6px;
+            font-weight: bold;
+        }
+
+        /* 📱 MOBILE RESPONSIVE */
+        @media (max-width: 768px) {
+
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 15px;
+                border-radius: 0;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .section h2 {
+                font-size: 16px;
+            }
+
+            label {
+                font-size: 14px;
+            }
+
+            .sub {
+                margin-left: 15px;
+            }
+
+            .progress-bar-bg {
+                height: 18px;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -70,106 +119,97 @@ label {
 
 <div class="container">
 
-<!-- Progress -->
-<div class="progress-bar-bg">
-    <div class="progress-bar" id="progressBar">0%</div>
-</div>
-<div class="percentage" id="percentageText">0% Completed</div>
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar-bg">
+            <div class="progress-bar" id="progressBar">0%</div>
+        </div>
+        <div class="percentage" id="percentageText">0% Completed</div>
+    </div>
 
-<!-- Programming Languages -->
-<div class="section">
-<h2>1️⃣ Programming Languages</h2>
+    <!-- Programming Languages -->
+    <div class="section">
+        <h2>1️⃣ Programming Languages</h2>
 
-<!-- C -->
-<label>
-<input type="checkbox" class="parent" data-group="c"> C Language
-</label>
-<label class="sub"><input type="checkbox" data-parent="c"> Basics & Syntax</label>
-<label class="sub"><input type="checkbox" data-parent="c"> Data Types</label>
-<label class="sub"><input type="checkbox" data-parent="c"> Conditionals</label>
-<label class="sub"><input type="checkbox" data-parent="c"> Loops</label>
-<label class="sub"><input type="checkbox" data-parent="c"> Functions</label>
-<label class="sub"><input type="checkbox" data-parent="c"> Arrays & Strings</label>
-<label class="sub"><input type="checkbox" data-parent="c"> Pointers</label>
-<label class="sub"><input type="checkbox" data-parent="c"> Structures</label>
-<label class="sub"><input type="checkbox" data-parent="c"> File Handling</label>
+        <!-- C -->
+        <label>
+            <input type="checkbox" class="parent" data-group="c"> C Language
+        </label>
+        <label class="sub"><input type="checkbox" data-parent="c"> Basics & Syntax</label>
+        <label class="sub"><input type="checkbox" data-parent="c"> Data Types</label>
+        <label class="sub"><input type="checkbox" data-parent="c"> Loops</label>
+        <label class="sub"><input type="checkbox" data-parent="c"> Functions</label>
+        <label class="sub"><input type="checkbox" data-parent="c"> Arrays & Strings</label>
+        <label class="sub"><input type="checkbox" data-parent="c"> Pointers</label>
 
-<br>
+        <br>
 
-<!-- Python -->
-<label>
-<input type="checkbox" class="parent" data-group="python"> Python
-</label>
-<label class="sub"><input type="checkbox" data-parent="python"> Basics & Syntax</label>
-<label class="sub"><input type="checkbox" data-parent="python"> Data Types</label>
-<label class="sub"><input type="checkbox" data-parent="python"> Conditionals & Loops</label>
-<label class="sub"><input type="checkbox" data-parent="python"> Functions</label>
-<label class="sub"><input type="checkbox" data-parent="python"> Lists & Tuples</label>
-<label class="sub"><input type="checkbox" data-parent="python"> Dictionaries</label>
-<label class="sub"><input type="checkbox" data-parent="python"> OOP</label>
-<label class="sub"><input type="checkbox" data-parent="python"> Exception Handling</label>
-<label class="sub"><input type="checkbox" data-parent="python"> File Handling</label>
+        <!-- Python -->
+        <label>
+            <input type="checkbox" class="parent" data-group="python"> Python
+        </label>
+        <label class="sub"><input type="checkbox" data-parent="python"> Basics & Syntax</label>
+        <label class="sub"><input type="checkbox" data-parent="python"> Data Types</label>
+        <label class="sub"><input type="checkbox" data-parent="python"> Loops</label>
+        <label class="sub"><input type="checkbox" data-parent="python"> Functions</label>
+        <label class="sub"><input type="checkbox" data-parent="python"> OOP</label>
+        <label class="sub"><input type="checkbox" data-parent="python"> File Handling</label>
+    </div>
 
-</div>
+    <!-- DSA -->
+    <div class="section">
+        <h2>2️⃣ Data Structures & Algorithms</h2>
 
-<!-- DSA -->
-<div class="section">
-<h2>2️⃣ Data Structures & Algorithms</h2>
-
-<label>
-<input type="checkbox" class="parent" data-group="dsa"> DSA
-</label>
-<label class="sub"><input type="checkbox" data-parent="dsa"> Arrays & Strings</label>
-<label class="sub"><input type="checkbox" data-parent="dsa"> Linked List</label>
-<label class="sub"><input type="checkbox" data-parent="dsa"> Stack & Queue</label>
-<label class="sub"><input type="checkbox" data-parent="dsa"> Trees</label>
-<label class="sub"><input type="checkbox" data-parent="dsa"> Graphs</label>
-<label class="sub"><input type="checkbox" data-parent="dsa"> Recursion</label>
-<label class="sub"><input type="checkbox" data-parent="dsa"> Dynamic Programming</label>
-
-</div>
+        <label>
+            <input type="checkbox" class="parent" data-group="dsa"> DSA
+        </label>
+        <label class="sub"><input type="checkbox" data-parent="dsa"> Arrays & Strings</label>
+        <label class="sub"><input type="checkbox" data-parent="dsa"> Linked List</label>
+        <label class="sub"><input type="checkbox" data-parent="dsa"> Stack & Queue</label>
+        <label class="sub"><input type="checkbox" data-parent="dsa"> Trees</label>
+        <label class="sub"><input type="checkbox" data-parent="dsa"> Graphs</label>
+        <label class="sub"><input type="checkbox" data-parent="dsa"> Dynamic Programming</label>
+    </div>
 
 </div>
 
 <script>
-const allCheckboxes = document.querySelectorAll("input[type='checkbox']");
-const progressBar = document.getElementById("progressBar");
-const percentageText = document.getElementById("percentageText");
+    const allCheckboxes = document.querySelectorAll("input[type='checkbox']");
+    const progressBar = document.getElementById("progressBar");
+    const percentageText = document.getElementById("percentageText");
 
-/* Parent → Children */
-document.querySelectorAll(".parent").forEach(parent => {
-    parent.addEventListener("change", () => {
-        const group = parent.dataset.group;
-        document.querySelectorAll(`[data-parent='${group}']`)
-            .forEach(child => child.checked = parent.checked);
-        updateProgress();
+    /* Parent → Children */
+    document.querySelectorAll(".parent").forEach(parent => {
+        parent.addEventListener("change", () => {
+            const group = parent.dataset.group;
+            document.querySelectorAll(`[data-parent="${group}"]`)
+                .forEach(child => child.checked = parent.checked);
+            updateProgress();
+        });
     });
-});
 
-/* Children → Parent */
-document.querySelectorAll("[data-parent]").forEach(child => {
-    child.addEventListener("change", () => {
-        const parentGroup = child.dataset.parent;
-        const parent = document.querySelector(`[data-group='${parentGroup}']`);
-        const children = document.querySelectorAll(`[data-parent='${parentGroup}']`);
-        parent.checked = [...children].every(c => c.checked);
-        updateProgress();
+    /* Children → Parent */
+    document.querySelectorAll("[data-parent]").forEach(child => {
+        child.addEventListener("change", () => {
+            const group = child.dataset.parent;
+            const parent = document.querySelector(`[data-group="${group}"]`);
+            const children = document.querySelectorAll(`[data-parent="${group}"]`);
+            parent.checked = [...children].every(c => c.checked);
+            updateProgress();
+        });
     });
-});
 
-/* Progress Bar */
-function updateProgress() {
-    const total = allCheckboxes.length;
-    const checked = document.querySelectorAll("input[type='checkbox']:checked").length;
-    const percent = Math.round((checked / total) * 100);
+    /* Progress Bar */
+    function updateProgress() {
+        const total = allCheckboxes.length;
+        const checked = document.querySelectorAll("input[type='checkbox']:checked").length;
+        const percent = Math.round((checked / total) * 100);
 
-    progressBar.style.width = percent + "%";
-    progressBar.textContent = percent + "%";
-    percentageText.textContent = percent + "% Completed";
-}
+        progressBar.style.width = percent + "%";
+        progressBar.textContent = percent + "%";
+        percentageText.textContent = percent + "% Completed";
+    }
 </script>
 
 </body>
 </html>
-
-
