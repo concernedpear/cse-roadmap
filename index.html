@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
 
-    <!-- ✅ IMPORTANT: Mobile Responsive -->
+    <!-- Mobile Responsive -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>CSE Placement Roadmap Tracker</title>
@@ -24,7 +24,7 @@
         .container {
             max-width: 900px;
             margin: auto;
-            background: #ffffff;
+            background: white;
             padding: 20px;
             border-radius: 8px;
         }
@@ -78,37 +78,14 @@
             font-weight: bold;
         }
 
-        /* 📱 MOBILE RESPONSIVE */
+        /* Mobile */
         @media (max-width: 768px) {
-
-            body {
-                padding: 10px;
-            }
-
-            .container {
-                padding: 15px;
-                border-radius: 0;
-            }
-
-            h1 {
-                font-size: 20px;
-            }
-
-            .section h2 {
-                font-size: 16px;
-            }
-
-            label {
-                font-size: 14px;
-            }
-
-            .sub {
-                margin-left: 15px;
-            }
-
-            .progress-bar-bg {
-                height: 18px;
-            }
+            body { padding: 10px; }
+            .container { padding: 15px; border-radius: 0; }
+            h1 { font-size: 20px; }
+            label { font-size: 14px; }
+            .sub { margin-left: 15px; }
+            .progress-bar-bg { height: 18px; }
         }
     </style>
 </head>
@@ -119,7 +96,7 @@
 
 <div class="container">
 
-    <!-- Progress Bar -->
+    <!-- Progress -->
     <div class="progress-container">
         <div class="progress-bar-bg">
             <div class="progress-bar" id="progressBar">0%</div>
@@ -133,27 +110,27 @@
 
         <!-- C -->
         <label>
-            <input type="checkbox" class="parent" data-group="c"> C Language
+            <input type="checkbox" class="parent" data-group="c" data-id="c"> C Language
         </label>
-        <label class="sub"><input type="checkbox" data-parent="c"> Basics & Syntax</label>
-        <label class="sub"><input type="checkbox" data-parent="c"> Data Types</label>
-        <label class="sub"><input type="checkbox" data-parent="c"> Loops</label>
-        <label class="sub"><input type="checkbox" data-parent="c"> Functions</label>
-        <label class="sub"><input type="checkbox" data-parent="c"> Arrays & Strings</label>
-        <label class="sub"><input type="checkbox" data-parent="c"> Pointers</label>
+        <label class="sub"><input type="checkbox" data-parent="c" data-id="c.basics"> Basics & Syntax</label>
+        <label class="sub"><input type="checkbox" data-parent="c" data-id="c.datatypes"> Data Types</label>
+        <label class="sub"><input type="checkbox" data-parent="c" data-id="c.loops"> Loops</label>
+        <label class="sub"><input type="checkbox" data-parent="c" data-id="c.functions"> Functions</label>
+        <label class="sub"><input type="checkbox" data-parent="c" data-id="c.arrays"> Arrays & Strings</label>
+        <label class="sub"><input type="checkbox" data-parent="c" data-id="c.pointers"> Pointers</label>
 
         <br>
 
         <!-- Python -->
         <label>
-            <input type="checkbox" class="parent" data-group="python"> Python
+            <input type="checkbox" class="parent" data-group="python" data-id="python"> Python
         </label>
-        <label class="sub"><input type="checkbox" data-parent="python"> Basics & Syntax</label>
-        <label class="sub"><input type="checkbox" data-parent="python"> Data Types</label>
-        <label class="sub"><input type="checkbox" data-parent="python"> Loops</label>
-        <label class="sub"><input type="checkbox" data-parent="python"> Functions</label>
-        <label class="sub"><input type="checkbox" data-parent="python"> OOP</label>
-        <label class="sub"><input type="checkbox" data-parent="python"> File Handling</label>
+        <label class="sub"><input type="checkbox" data-parent="python" data-id="python.basics"> Basics & Syntax</label>
+        <label class="sub"><input type="checkbox" data-parent="python" data-id="python.datatypes"> Data Types</label>
+        <label class="sub"><input type="checkbox" data-parent="python" data-id="python.loops"> Loops</label>
+        <label class="sub"><input type="checkbox" data-parent="python" data-id="python.functions"> Functions</label>
+        <label class="sub"><input type="checkbox" data-parent="python" data-id="python.oop"> OOP</label>
+        <label class="sub"><input type="checkbox" data-parent="python" data-id="python.files"> File Handling</label>
     </div>
 
     <!-- DSA -->
@@ -161,45 +138,77 @@
         <h2>2️⃣ Data Structures & Algorithms</h2>
 
         <label>
-            <input type="checkbox" class="parent" data-group="dsa"> DSA
+            <input type="checkbox" class="parent" data-group="dsa" data-id="dsa"> DSA
         </label>
-        <label class="sub"><input type="checkbox" data-parent="dsa"> Arrays & Strings</label>
-        <label class="sub"><input type="checkbox" data-parent="dsa"> Linked List</label>
-        <label class="sub"><input type="checkbox" data-parent="dsa"> Stack & Queue</label>
-        <label class="sub"><input type="checkbox" data-parent="dsa"> Trees</label>
-        <label class="sub"><input type="checkbox" data-parent="dsa"> Graphs</label>
-        <label class="sub"><input type="checkbox" data-parent="dsa"> Dynamic Programming</label>
+        <label class="sub"><input type="checkbox" data-parent="dsa" data-id="dsa.arrays"> Arrays & Strings</label>
+        <label class="sub"><input type="checkbox" data-parent="dsa" data-id="dsa.ll"> Linked List</label>
+        <label class="sub"><input type="checkbox" data-parent="dsa" data-id="dsa.stack"> Stack & Queue</label>
+        <label class="sub"><input type="checkbox" data-parent="dsa" data-id="dsa.trees"> Trees</label>
+        <label class="sub"><input type="checkbox" data-parent="dsa" data-id="dsa.graphs"> Graphs</label>
+        <label class="sub"><input type="checkbox" data-parent="dsa" data-id="dsa.dp"> Dynamic Programming</label>
     </div>
 
 </div>
 
 <script>
+    const STORAGE_KEY = "cse-roadmap-progress";
+
     const allCheckboxes = document.querySelectorAll("input[type='checkbox']");
     const progressBar = document.getElementById("progressBar");
     const percentageText = document.getElementById("percentageText");
 
-    /* Parent → Children */
+    /* ---------------- SAVE / LOAD ---------------- */
+
+    function loadProgress() {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+        allCheckboxes.forEach(cb => {
+            const id = cb.dataset.id;
+            if (id && saved[id]) cb.checked = true;
+        });
+        syncParents();
+        updateProgress();
+    }
+
+    function saveProgress() {
+        const data = {};
+        allCheckboxes.forEach(cb => {
+            if (cb.checked && cb.dataset.id) {
+                data[cb.dataset.id] = true;
+            }
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    /* ---------------- PARENT ↔ CHILD ---------------- */
+
+    function syncParents() {
+        document.querySelectorAll(".parent").forEach(parent => {
+            const group = parent.dataset.group;
+            const children = document.querySelectorAll(`[data-parent="${group}"]`);
+            parent.checked = [...children].every(c => c.checked);
+        });
+    }
+
     document.querySelectorAll(".parent").forEach(parent => {
         parent.addEventListener("change", () => {
             const group = parent.dataset.group;
             document.querySelectorAll(`[data-parent="${group}"]`)
                 .forEach(child => child.checked = parent.checked);
+            saveProgress();
             updateProgress();
         });
     });
 
-    /* Children → Parent */
     document.querySelectorAll("[data-parent]").forEach(child => {
         child.addEventListener("change", () => {
-            const group = child.dataset.parent;
-            const parent = document.querySelector(`[data-group="${group}"]`);
-            const children = document.querySelectorAll(`[data-parent="${group}"]`);
-            parent.checked = [...children].every(c => c.checked);
+            syncParents();
+            saveProgress();
             updateProgress();
         });
     });
 
-    /* Progress Bar */
+    /* ---------------- PROGRESS BAR ---------------- */
+
     function updateProgress() {
         const total = allCheckboxes.length;
         const checked = document.querySelectorAll("input[type='checkbox']:checked").length;
@@ -209,6 +218,9 @@
         progressBar.textContent = percent + "%";
         percentageText.textContent = percent + "% Completed";
     }
+
+    /* INIT */
+    loadProgress();
 </script>
 
 </body>
