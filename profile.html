@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complete Your Profile</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 8px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    p {
+      text-align: center;
+      color: #555;
+      font-size: 14px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      font-size: 14px;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .error {
+      color: red;
+      font-size: 13px;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>👋 Complete Your Profile</h2>
+  <p>This information is required before accessing the roadmap.</p>
+
+  <form id="profileForm">
+
+    <!-- Full Name -->
+    <label for="fullName">Full Name (Admin only)</label>
+    <input type="text" id="fullName" placeholder="Your full name" required>
+
+    <!-- Display Name -->
+    <label for="displayName">Display Name (Optional)</label>
+    <input type="text" id="displayName" placeholder="Nickname visible to others">
+
+    <!-- B.Tech Start Month -->
+    <label for="startMonth">B.Tech Start Month</label>
+    <select id="startMonth" required>
+      <option value="">Select month</option>
+      <option>January</option>
+      <option>February</option>
+      <option>March</option>
+      <option>April</option>
+      <option>May</option>
+      <option>June</option>
+      <option>July</option>
+      <option>August</option>
+      <option>September</option>
+      <option>October</option>
+      <option>November</option>
+      <option>December</option>
+    </select>
+
+    <!-- B.Tech Start Year -->
+    <label for="startYear">B.Tech Start Year</label>
+    <select id="startYear" required>
+      <option value="">Select year</option>
+      <option>2021</option>
+      <option>2022</option>
+      <option>2023</option>
+      <option>2024</option>
+      <option>2025</option>
+      <option>2026</option>
+    </select>
+
+    <!-- Goal -->
+    <label for="goal">Primary Goal</label>
+    <select id="goal" required>
+      <option value="">Select goal</option>
+      <option>Placements</option>
+      <option>Internships</option>
+      <option>Higher Studies</option>
+      <option>Competitive Programming</option>
+    </select>
+
+    <div id="errorMsg" class="error"></div>
+
+    <button type="submit">Continue</button>
+
+  </form>
+</div>
+
+<script>
+  const form = document.getElementById("profileForm");
+  const errorMsg = document.getElementById("errorMsg");
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const fullName = document.getElementById("fullName").value.trim();
+    const displayName = document.getElementById("displayName").value.trim();
+    const month = document.getElementById("startMonth").value;
+    const year = document.getElementById("startYear").value;
+    const goal = document.getElementById("goal").value;
+
+    if (!fullName || !month || !year || !goal) {
+      errorMsg.textContent = "Please fill all required fields.";
+      return;
+    }
+
+    // UI-only step → no Firestore yet
+    errorMsg.textContent = "";
+
+    alert(
+      "Profile form validated successfully.\n\n" +
+      "Next step: save this data to Firestore."
+    );
+  });
+</script>
+
+</body>
+</html>
