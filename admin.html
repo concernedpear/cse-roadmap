@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - CSE Roadmap</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      padding: 20px;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .denied {
+      color: red;
+      font-weight: bold;
+    }
+
+    button {
+      padding: 8px 14px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>🔐 Admin Panel</h2>
+  <p id="status">Checking access...</p>
+  <button id="logoutBtn" style="display:none;">Logout</button>
+</div>
+
+<!-- FIREBASE SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+<script>
+/* 🔴 PASTE YOUR FIREBASE CONFIG (SAME AS index.html) */
+const firebaseConfig = {
+  apiKey: "AIzaSyCh25xL8R3d1RRhe7zm7K7kbPk_RwBVVsI",
+  authDomain: "cse-roadmap.firebaseapp.com",
+  projectId: "cse-roadmap",
+  appId: "1:982200573078:web:7c5ace992a1c9b17c7f6b7"
+};
+
+/* 🔴 PASTE YOUR ADMIN EMAIL HERE */
+const ADMIN_EMAIL = "saksham79moni@gmail.com";
+
+/* ------------------------------------------------ */
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const provider = new firebase.auth.GoogleAuthProvider();
+
+const statusText = document.getElementById("status");
+const logoutBtn = document.getElementById("logoutBtn");
+
+auth.onAuthStateChanged(user => {
+  if (!user) {
+    auth.signInWithPopup(provider);
+    return;
+  }
+
+  if (user.email === ADMIN_EMAIL) {
+    statusText.textContent = `Welcome Admin (${user.email})`;
+    logoutBtn.style.display = "inline-block";
+  } else {
+    statusText.innerHTML = `<span class="denied">Access Denied</span>`;
+  }
+});
+
+logoutBtn.onclick = () => auth.signOut();
+</script>
+
+</body>
+</html>
