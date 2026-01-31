@@ -137,7 +137,6 @@ loginBtn.onclick = () => auth.signInWithRedirect(provider);
 logoutBtn.onclick = () => auth.signOut();
 
 auth.onAuthStateChanged(async user => {
-  console.log("Auth state:", user);
   currentUser = user;
 
   if (!user) {
@@ -149,6 +148,12 @@ auth.onAuthStateChanged(async user => {
     return;
   }
 
+  // 🔑 IMPORTANT: update UI IMMEDIATELY
+  userInfo.textContent = "Logged in";
+  loginBtn.style.display = "none";
+  logoutBtn.style.display = "inline-block";
+  enableCheckboxes(false); // locked until profile check
+
   const userDoc = await db.collection("users").doc(user.uid).get();
 
   if (!userDoc.exists || !userDoc.data().profileCompleted) {
@@ -156,9 +161,8 @@ auth.onAuthStateChanged(async user => {
     return;
   }
 
+  // 🔑 Now refine UI with real data
   userInfo.textContent = `Logged in as ${userDoc.data().displayName}`;
-  loginBtn.style.display = "none";
-  logoutBtn.style.display = "inline-block";
   enableCheckboxes(true);
   await loadProgress();
 });
@@ -237,3 +241,4 @@ enableCheckboxes(false);
 
 </body>
 </html>
+
