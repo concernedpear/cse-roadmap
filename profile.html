@@ -130,7 +130,7 @@ const errorMsg = document.getElementById("errorMsg");
 
 auth.onAuthStateChanged(user => {
   if (!user) {
-    window.location.href = "index.html";
+    window.location.href = "map.html";
   }
 });
 
@@ -161,7 +161,7 @@ document.getElementById("profileForm").addEventListener("submit", async (e) => {
 
   try {
     await db.collection("users").doc(user.uid).set(profileData);
-    window.location.href = "index.html";
+    window.location.href = "map.html";
   } catch (err) {
     errorMsg.textContent = "Failed to save profile. Try again.";
   }
