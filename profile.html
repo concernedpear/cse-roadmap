@@ -56,7 +56,8 @@
     .error {
       color: red;
       font-size: 13px;
-      margin-top: 5px;
+      margin-top: 10px;
+      text-align: center;
     }
   </style>
 </head>
@@ -65,50 +66,33 @@
 
 <div class="container">
   <h2>👋 Complete Your Profile</h2>
-  <p>This information is required before accessing the roadmap.</p>
+  <p>This is required before accessing the roadmap.</p>
 
   <form id="profileForm">
 
-    <!-- Full Name -->
-    <label for="fullName">Full Name (Admin only)</label>
-    <input type="text" id="fullName" placeholder="Your full name" required>
+    <label>Full Name (Admin only)</label>
+    <input type="text" id="fullName" required>
 
-    <!-- Display Name -->
-    <label for="displayName">Display Name (Optional)</label>
-    <input type="text" id="displayName" placeholder="Nickname visible to others">
+    <label>Display Name (Optional)</label>
+    <input type="text" id="displayName">
 
-    <!-- B.Tech Start Month -->
-    <label for="startMonth">B.Tech Start Month</label>
+    <label>B.Tech Start Month</label>
     <select id="startMonth" required>
       <option value="">Select month</option>
-      <option>January</option>
-      <option>February</option>
-      <option>March</option>
-      <option>April</option>
-      <option>May</option>
-      <option>June</option>
-      <option>July</option>
-      <option>August</option>
-      <option>September</option>
-      <option>October</option>
-      <option>November</option>
-      <option>December</option>
+      <option>January</option><option>February</option><option>March</option>
+      <option>April</option><option>May</option><option>June</option>
+      <option>July</option><option>August</option><option>September</option>
+      <option>October</option><option>November</option><option>December</option>
     </select>
 
-    <!-- B.Tech Start Year -->
-    <label for="startYear">B.Tech Start Year</label>
+    <label>B.Tech Start Year</label>
     <select id="startYear" required>
       <option value="">Select year</option>
-      <option>2021</option>
-      <option>2022</option>
-      <option>2023</option>
-      <option>2024</option>
-      <option>2025</option>
-      <option>2026</option>
+      <option>2021</option><option>2022</option><option>2023</option>
+      <option>2024</option><option>2025</option><option>2026</option>
     </select>
 
-    <!-- Goal -->
-    <label for="goal">Primary Goal</label>
+    <label>Primary Goal</label>
     <select id="goal" required>
       <option value="">Select goal</option>
       <option>Placements</option>
@@ -117,39 +101,71 @@
       <option>Competitive Programming</option>
     </select>
 
-    <div id="errorMsg" class="error"></div>
+    <div class="error" id="errorMsg"></div>
 
-    <button type="submit">Continue</button>
+    <button type="submit">Save & Continue</button>
 
   </form>
 </div>
 
+<!-- FIREBASE SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
 <script>
-  const form = document.getElementById("profileForm");
-  const errorMsg = document.getElementById("errorMsg");
+/* 🔴 PASTE SAME FIREBASE CONFIG AS index.html */
+const firebaseConfig = {
+  apiKey: "AIzaSyCh25xL8R3d1RRhe7zm7K7kbPk_RwBVVsI",
+  authDomain: "cse-roadmap.firebaseapp.com",
+  projectId: "cse-roadmap",
+  appId: "1:982200573078:web:7c5ace992a1c9b17c7f6b7"
+};
 
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
+firebase.initializeApp(firebaseConfig);
 
-    const fullName = document.getElementById("fullName").value.trim();
-    const displayName = document.getElementById("displayName").value.trim();
-    const month = document.getElementById("startMonth").value;
-    const year = document.getElementById("startYear").value;
-    const goal = document.getElementById("goal").value;
+const auth = firebase.auth();
+const db = firebase.firestore();
+const errorMsg = document.getElementById("errorMsg");
 
-    if (!fullName || !month || !year || !goal) {
-      errorMsg.textContent = "Please fill all required fields.";
-      return;
-    }
+auth.onAuthStateChanged(user => {
+  if (!user) {
+    window.location.href = "index.html";
+  }
+});
 
-    // UI-only step → no Firestore yet
-    errorMsg.textContent = "";
+document.getElementById("profileForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    alert(
-      "Profile form validated successfully.\n\n" +
-      "Next step: save this data to Firestore."
-    );
-  });
+  const fullName = document.getElementById("fullName").value.trim();
+  const displayNameInput = document.getElementById("displayName").value.trim();
+  const month = document.getElementById("startMonth").value;
+  const year = document.getElementById("startYear").value;
+  const goal = document.getElementById("goal").value;
+
+  if (!fullName || !month || !year || !goal) {
+    errorMsg.textContent = "Please fill all required fields.";
+    return;
+  }
+
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const profileData = {
+    fullName: fullName,
+    displayName: displayNameInput || fullName,
+    btechStart: { month, year },
+    goal,
+    profileCompleted: true
+  };
+
+  try {
+    await db.collection("users").doc(user.uid).set(profileData);
+    window.location.href = "index.html";
+  } catch (err) {
+    errorMsg.textContent = "Failed to save profile. Try again.";
+  }
+});
 </script>
 
 </body>
