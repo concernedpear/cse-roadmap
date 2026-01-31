@@ -154,7 +154,7 @@ const allCheckboxes = document.querySelectorAll("input[type='checkbox']");
 let currentUser = null;
 
 /* AUTH */
-loginBtn.onclick = () => auth.signInWithPopup(provider);
+loginBtn.onclick = () => auth.signInWithRedirect(provider);
 logoutBtn.onclick = () => auth.signOut();
 
 auth.onAuthStateChanged(async user => {
@@ -298,5 +298,6 @@ enableCheckboxes(false);
 
 </body>
 </html>
+
 
 
