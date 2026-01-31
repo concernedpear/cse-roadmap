@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Firebase Auth Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body style="font-family: Arial; padding: 20px;">
+  <h2>🔥 Firebase Auth Test</h2>
+
+  <p id="status">Checking auth...</p>
+
+  <button id="loginBtn">Login with Google</button>
+  <button id="logoutBtn">Logout</button>
+
+  <pre id="output"></pre>
+
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCh25xL8R3d1RRhe7zm7K7kbPk_RwBVVsI",
+      authDomain: "cse-roadmap.firebaseapp.com",
+      projectId: "cse-roadmap",
+      appId: "1:982200573078:web:7c5ace992a1c9b17c7f6b7"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    const auth = firebase.auth();
+    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+
+    const status = document.getElementById("status");
+    const output = document.getElementById("output");
+
+    document.getElementById("loginBtn").onclick = () => {
+      auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());
+    };
+
+    document.getElementById("logoutBtn").onclick = () => {
+      auth.signOut();
+    };
+
+    auth.getRedirectResult()
+      .then(result => {
+        if (result && result.user) {
+          output.textContent = "Redirect result user:\n" + JSON.stringify({
+            uid: result.user.uid,
+            email: result.user.email
+          }, null, 2);
+        }
+      })
+      .catch(err => {
+        output.textContent = "Redirect error:\n" + err.message;
+      });
+
+    auth.onAuthStateChanged(user => {
+      if (!user) {
+        status.textContent = "❌ Not logged in";
+        output.textContent += "\nAuth state: null";
+      } else {
+        status.textContent = "✅ Logged in";
+        output.textContent += "\nAuth state user:\n" + JSON.stringify({
+          uid: user.uid,
+          email: user.email
+        }, null, 2);
+      }
+    });
+  </script>
+</body>
+</html>
